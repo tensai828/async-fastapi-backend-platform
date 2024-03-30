@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from app.core.config import ModeEnum, settings
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.pool import NullPool, QueuePool
+from sqlalchemy.pool import NullPool, AsyncAdaptedQueuePool
 
 DB_POOL_SIZE = 83
 WEB_CONCURRENCY = 9
@@ -19,7 +19,7 @@ engine = create_async_engine(
     # max_overflow=64,
     poolclass=NullPool
     if settings.MODE == ModeEnum.testing
-    else QueuePool,  # Asincio pytest works with NullPool
+    else AsyncAdaptedQueuePool,  # Asincio pytest works with NullPool
 )
 
 SessionLocal = sessionmaker(
@@ -36,6 +36,9 @@ engine_celery = create_async_engine(
     future=True,
     # pool_size=POOL_SIZE,
     # max_overflow=64,
+    poolclass=NullPool
+    if settings.MODE == ModeEnum.testing
+    else AsyncAdaptedQueuePool,  # Asincio pytest works with NullPool
 )
 
 SessionLocalCelery = sessionmaker(

@@ -20,7 +20,7 @@ from fastapi_limiter.depends import WebSocketRateLimiter
 from jwt import DecodeError, ExpiredSignatureError, MissingRequiredClaimError
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
-from sqlalchemy.pool import NullPool, QueuePool
+from sqlalchemy.pool import NullPool, AsyncAdaptedQueuePool
 from starlette.middleware.cors import CORSMiddleware
 from transformers import pipeline
 
@@ -120,9 +120,9 @@ app.add_middleware(
         # "pool_pre_ping": True,
         # "pool_size": settings.POOL_SIZE,
         # "max_overflow": 64,
-        "poolclass": NullPool
-        if settings.MODE == ModeEnum.testing
-        else QueuePool,  # Asincio pytest works with NullPool
+        "poolclass": (
+            NullPool if settings.MODE == ModeEnum.testing else AsyncAdaptedQueuePool
+        ),  # Asincio pytest works with NullPool
     },
 )
 app.add_middleware(GlobalsMiddleware)
