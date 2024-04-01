@@ -18,7 +18,7 @@ class TestPostLogin:
         [
             ("post", "/login", {"email": "incorrect_email@gmail.com", "password": "123456"}, 400, {"detail": "Email or Password incorrect"}),
             ("post", "/login", {"email": settings.FIRST_SUPERUSER_EMAIL, "password": settings.FIRST_SUPERUSER_PASSWORD}, 200, None),  # Add expected JSON response for successful login
-            ("post", "/login/new_access_token", {"refresh_token": ""}, 403, {"detail": "Refresh token invalid"}),            
+            ("post", "/login/new_access_token", {"refresh_token": ""}, 403, {"detail": "Error when decoding the token. Please check your request."})
         ],
     )
     async def test(self, test_client, method, endpoint, data, expected_status, expected_response):

@@ -117,12 +117,10 @@ app.add_middleware(
     db_url=str(settings.ASYNC_DATABASE_URI),
     engine_args={
         "echo": False,
+        "poolclass": NullPool if settings.MODE == ModeEnum.testing else AsyncAdaptedQueuePool
         # "pool_pre_ping": True,
         # "pool_size": settings.POOL_SIZE,
-        # "max_overflow": 64,
-        "poolclass": (
-            NullPool if settings.MODE == ModeEnum.testing else AsyncAdaptedQueuePool
-        ),  # Asincio pytest works with NullPool
+        # "max_overflow": 64,           
     },
 )
 app.add_middleware(GlobalsMiddleware)

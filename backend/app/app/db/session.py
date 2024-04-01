@@ -14,12 +14,11 @@ connect_args = {"check_same_thread": False}
 engine = create_async_engine(
     str(settings.ASYNC_DATABASE_URI),
     echo=False,
-    future=True,
-    # pool_size=POOL_SIZE,
-    # max_overflow=64,
     poolclass=NullPool
     if settings.MODE == ModeEnum.testing
     else AsyncAdaptedQueuePool,  # Asincio pytest works with NullPool
+    # pool_size=POOL_SIZE,
+    # max_overflow=64,
 )
 
 SessionLocal = sessionmaker(
@@ -32,13 +31,12 @@ SessionLocal = sessionmaker(
 
 engine_celery = create_async_engine(
     str(settings.ASYNC_CELERY_BEAT_DATABASE_URI),
-    # echo=True,
-    future=True,
-    # pool_size=POOL_SIZE,
-    # max_overflow=64,
+    echo=False,
     poolclass=NullPool
     if settings.MODE == ModeEnum.testing
     else AsyncAdaptedQueuePool,  # Asincio pytest works with NullPool
+    # pool_size=POOL_SIZE,
+    # max_overflow=64,    
 )
 
 SessionLocalCelery = sessionmaker(
