@@ -6,7 +6,7 @@ services:
     build: 
       context: ./backend      
       args:
-        INSTALL_DEV: "true"   
+        INSTALL_DEV: "true"
     restart: always
     command: "sh -c 'alembic upgrade head && uvicorn app.main:app --reload --workers 3 --host 0.0.0.0 --port 8000'"
     volumes:
