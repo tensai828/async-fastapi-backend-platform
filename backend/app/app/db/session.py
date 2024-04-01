@@ -36,7 +36,7 @@ engine_celery = create_async_engine(
     if settings.MODE == ModeEnum.testing
     else AsyncAdaptedQueuePool,  # Asincio pytest works with NullPool
     # pool_size=POOL_SIZE,
-    # max_overflow=64,    
+    # max_overflow=64,
 )
 
 SessionLocalCelery = sessionmaker(
